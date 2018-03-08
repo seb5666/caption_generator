@@ -1,6 +1,7 @@
 import pickle
 from keras.preprocessing import image
-from keras.applications.vgg16 import VGG16
+#from keras.applications.vgg16 import VGG16 # Not the same as the local one?
+from vgg16 import VGG16
 import numpy as np 
 from keras.applications.imagenet_utils import preprocess_input	
 
