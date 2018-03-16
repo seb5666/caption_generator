@@ -110,23 +110,20 @@ class CaptionGenerator():
 
 
     def create_model(self, ret_model = False):
-        #base_model = VGG16(weights='imagenet', include_top=False, input_shape = (224, 224, 3))
-        #base_model.trainable=False
         image_model = Sequential()
-        #image_model.add(base_model)
-        #image_model.add(Flatten())
+
         image_model.add(Dense(EMBEDDING_DIM, input_dim = 4096, activation='relu'))
 
         image_model.add(RepeatVector(self.max_cap_len))
 
         lang_model = Sequential()
         lang_model.add(Embedding(self.vocab_size, 256, input_length=self.max_cap_len))
-        lang_model.add(LSTM(256,return_sequences=True))
+        lang_model.add(LSTM(256, return_sequences=True))
         lang_model.add(TimeDistributed(Dense(EMBEDDING_DIM)))
 
         model = Sequential()
         model.add(Merge([image_model, lang_model], mode='concat'))
-        model.add(LSTM(1000,return_sequences=False))
+        model.add(LSTM(1000, return_sequences=False))
         model.add(Dense(self.vocab_size))
         model.add(Activation('softmax'))
 
