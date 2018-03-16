@@ -2,6 +2,7 @@ import pickle
 import caption_generator
 import numpy as np
 from keras.preprocessing import sequence
+import keras.backend as K
 import nltk
 import keras.backend as K
 
@@ -19,8 +20,10 @@ def process_caption(caption):
 
 def get_best_caption(captions):
     captions.sort(key = lambda l:l[1])
-    best_caption = captions[-1][0]
-    return " ".join([cg.index_word[index] for index in best_caption])
+    best_caption_indexes = captions[-1][0]
+    best_caption = " ".join([cg.index_word[index] for index in best_caption_indexes])
+    best_prob = captions[-1][1]
+    return best_caption, best_prob 
 
 def get_all_captions(captions):
     final_captions = []
@@ -30,6 +33,7 @@ def get_all_captions(captions):
         final_captions.append([text_caption, caption[1]])
     return final_captions
 
+<<<<<<< Updated upstream
 def generate_captions(model, image, beam_size):
     start = [cg.word_index['<start>']]
     captions = [[start,.0]]
@@ -47,7 +51,6 @@ def generate_captions(model, image, beam_size):
         captions = temp_captions
         captions.sort(key = lambda l:l[1])
         captions = captions[-beam_size:]
-
     return captions
 
 def test_model(weight, img_name, beam_size = 3):
